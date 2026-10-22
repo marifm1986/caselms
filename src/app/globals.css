@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  /* Brand: deep ink navy, confident blue, warm brass accent */
+  --color-ink-950: #070d1f;
+  --color-ink-900: #0b1530;
+  --color-ink-800: #14214a;
+  --color-ink-700: #1e2f63;
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #dfe6ff;
+  --color-brand-200: #c3cffd;
+  --color-brand-300: #9cb0fb;
+  --color-brand-400: #6f88f6;
+  --color-brand-500: #4a63ee;
+  --color-brand-600: #2f45d8;
+  --color-brand-700: #2536b0;
+  --color-brand-800: #1f2e8a;
+  --color-brass-300: #f6d58c;
+  --color-brass-400: #f0c060;
+  --color-brass-500: #d9a23a;
+  --color-brass-700: #8a5d12;
+
+  --animate-marquee: marquee 40s linear infinite;
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-white font-sans text-slate-700 antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply text-ink-900 text-balance;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-600;
+  }
+  ::selection {
+    @apply bg-brand-200 text-ink-900;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility container-page {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+@utility btn {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60;
+}
+@utility btn-primary {
+  @apply btn bg-brand-600 text-white hover:bg-brand-700;
+}
+@utility btn-secondary {
+  @apply btn border border-slate-300 bg-white text-ink-900 hover:border-brand-600 hover:text-brand-700;
+}
+@utility btn-light {
+  @apply btn bg-white text-ink-900 hover:bg-brass-300;
+}
+@utility btn-ghost-dark {
+  @apply btn border border-white/30 text-white hover:bg-white/10;
+}
+@utility eyebrow {
+  @apply inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] text-brand-700 uppercase;
+}
+@utility section {
+  @apply py-20 sm:py-28;
+}
+@utility field-label {
+  @apply mb-1.5 block text-sm font-medium text-ink-900;
+}
+@utility field-input {
+  @apply block w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-ink-900 placeholder:text-slate-500 focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20 focus:outline-none aria-[invalid=true]:border-red-600;
+}
+
+@layer components {
+  .prose-post h2 {
+    @apply font-display mt-10 mb-3 text-2xl font-semibold;
+  }
+  .prose-post p {
+    @apply mb-5 text-lg leading-8 text-slate-700;
+  }
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+}

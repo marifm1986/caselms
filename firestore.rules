@@ -1,0 +1,61 @@
+rules_version = '2';
+
+// Case LMS Firestore security rules.
+// Admins are users with a document at admins/{uid}. Create the first one by
+// hand in the Firebase console (see README). Nobody can grant themselves admin.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function isPublished() {
+      return resource.data.published == true;
+    }
+
+    // Admin membership: a signed-in user may read their own entry (used by the
+    // admin panel and the revalidate action). Writes only via the console.
+    match /admins/{uid} {
+      allow read: if request.auth != null && (request.auth.uid == uid || isAdmin());
+      allow write: if false;
+    }
+
+    // Site-wide settings, including contact details. Public read.
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Content collections. The public sees published items only; the site
+    // queries with `published == true` so these rules are satisfied.
+    match /{collection}/{docId} {
+      function isContent() {
+        return collection in ['features', 'plans', 'testimonials', 'faqs', 'team', 'posts'];
+      }
+      allow read: if isContent() && (isPublished() || isAdmin());
+      allow write: if isContent() && isAdmin();
+    }
+
+    match /stats/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Contact form submissions: anyone may create a well-formed message,
+    // only admins may read, update (mark read) or delete.
+    match /messages/{docId} {
+      allow create: if request.resource.data.keys().hasOnly(['name', 'email', 'firm', 'phone', 'topic', 'message', 'read', 'createdAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() > 1 && request.resource.data.name.size() <= 120
+        && request.resource.data.email is string && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && request.resource.data.message is string && request.resource.data.message.size() >= 10 && request.resource.data.message.size() <= 3000
+        && request.resource.data.firm is string && request.resource.data.firm.size() <= 160
+        && request.resource.data.phone is string && request.resource.data.phone.size() <= 30
+        && request.resource.data.topic is string && request.resource.data.topic.size() <= 40
+        && request.resource.data.read == false
+        && request.resource.data.createdAt == request.time;
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}
