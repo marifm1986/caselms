@@ -15,6 +15,7 @@ import {
   Zap,
   type LucideIcon,
 } from "lucide-react";
+import Image from "next/image";
 
 // Icon keys selectable in the admin panel for features.
 export const featureIcons: Record<string, LucideIcon> = {
@@ -67,21 +68,6 @@ export const SocialIcons = {
 
 export function Logo({ className, light = false }: { className?: string; light?: boolean }) {
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className ?? ""}`}>
-      <svg viewBox="0 0 32 32" className="size-8 shrink-0" aria-hidden="true">
-        <rect width="32" height="32" rx="9" fill={light ? "#ffffff" : "#0b1530"} />
-        <path
-          d="M21.5 10.5a7.5 7.5 0 1 0 0 11"
-          fill="none"
-          stroke={light ? "#2f45d8" : "#f0c060"}
-          strokeWidth="3.2"
-          strokeLinecap="round"
-        />
-        <circle cx="22" cy="16" r="2.2" fill={light ? "#0b1530" : "#ffffff"} />
-      </svg>
-      <span className={`font-display text-xl font-semibold tracking-tight ${light ? "text-white" : "text-ink-900"}`}>
-        Case <span className={light ? "text-brass-300" : "text-brand-600"}>LMS</span>
-      </span>
-    </span>
+    <Image src={light?"/logo_white.svg":"/logo_black.svg"} alt="Brand logo" className={className} height={100} width={100}></Image>
   );
 }

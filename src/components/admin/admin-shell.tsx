@@ -1,6 +1,6 @@
 "use client";
 
-import { Inbox, LayoutDashboard, LoaderCircle, LogOut, Menu, Settings, X } from "lucide-react";
+import { Inbox, LayoutDashboard, LoaderCircle, LogOut, Menu, Settings, UserCog, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -10,6 +10,7 @@ import { ToastProvider } from "@/components/admin/ui";
 import { FeatureIcon, Logo } from "@/components/ui/icons";
 import { collections } from "@/lib/admin-schema";
 import { isFirebaseConfigured } from "@/lib/env";
+import { ADMIN_ROLE_LABELS, type AdminScope } from "@/lib/types";
 
 const collectionIcons: Record<string, string> = {
   features: "sparkles",
@@ -21,14 +22,18 @@ const collectionIcons: Record<string, string> = {
   posts: "globe",
 };
 
-const nav = [
+type NavItem = { href: string; label: string; icon: React.ReactNode; scope?: AdminScope };
+
+const nav: NavItem[] = [
   { href: "/admin", label: "Dashboard", icon: <LayoutDashboard className="size-5" aria-hidden="true" /> },
-  { href: "/admin/settings", label: "Site settings", icon: <Settings className="size-5" aria-hidden="true" /> },
-  { href: "/admin/messages", label: "Messages", icon: <Inbox className="size-5" aria-hidden="true" /> },
-  ...collections.map((c) => ({
+  { href: "/admin/settings", label: "Site settings", icon: <Settings className="size-5" aria-hidden="true" />, scope: "settings" },
+  { href: "/admin/messages", label: "Messages", icon: <Inbox className="size-5" aria-hidden="true" />, scope: "messages" },
+  { href: "/admin/users", label: "Users", icon: <UserCog className="size-5" aria-hidden="true" />, scope: "users" },
+  ...collections.map<NavItem>((c) => ({
     href: `/admin/content?type=${c.key}`,
     label: c.label,
     icon: <FeatureIcon name={collectionIcons[c.key]} className="size-5" />,
+    scope: "content",
   })),
 ];
 
@@ -49,7 +54,7 @@ function SetupNotice() {
 }
 
 function Gate({ children }: { children: React.ReactNode }) {
-  const { user, isAdmin, loading, logout } = useAuth();
+  const { user, isAdmin, role, can, loading, logout } = useAuth();
   const pathname = usePathname();
   const type = useSearchParams().get("type");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -98,7 +103,7 @@ function Gate({ children }: { children: React.ReactNode }) {
         <Logo light />
       </Link>
       <ul className="mt-8 flex-1 space-y-1 overflow-y-auto">
-        {nav.map((item) => (
+        {nav.filter((item) => !item.scope || can(item.scope)).map((item) => (
           <li key={item.href}>
             <Link
               href={item.href}
@@ -113,6 +118,11 @@ function Gate({ children }: { children: React.ReactNode }) {
       </ul>
       <div className="mt-6 border-t border-white/10 pt-4">
         <p className="truncate px-3 text-xs text-slate-400">{user.email}</p>
+        {role && (
+          <p className="px-3 text-[11px] font-semibold tracking-wider text-brass-300 uppercase">
+            {ADMIN_ROLE_LABELS[role]}
+          </p>
+        )}
         <button
           type="button"
           onClick={logout}

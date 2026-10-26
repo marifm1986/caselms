@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { ContentRoute } from "@/components/admin/content-route";
+import { ScopeGuard } from "@/components/admin/scope-guard";
 
 export const metadata = { title: "Content" };
 
@@ -7,8 +8,10 @@ export const metadata = { title: "Content" };
 // static routes (see src/lib/admin-schema.ts for the list of keys).
 export default function AdminContentPage() {
   return (
-    <Suspense>
-      <ContentRoute />
-    </Suspense>
+    <ScopeGuard scope="content">
+      <Suspense>
+        <ContentRoute />
+      </Suspense>
+    </ScopeGuard>
   );
 }

@@ -2,7 +2,8 @@ rules_version = '2';
 
 // Case LMS Firestore security rules.
 // Admins are users with a document at admins/{uid}. Create the first one by
-// hand in the Firebase console (see README). Nobody can grant themselves admin.
+// hand in the Firebase console (see README). Nobody can grant themselves admin
+// except by claiming a pending invite created by an existing admin.
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -11,15 +12,88 @@ service cloud.firestore {
         && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
 
+    function myAdminDoc() {
+      return get(/databases/$(database)/documents/admins/$(request.auth.uid)).data;
+    }
+
+    // Legacy admin docs (first bootstrap) may have no `role` field; treat as owner.
+    function myRole() {
+      return myAdminDoc().get('role', 'owner');
+    }
+
+    function myScopes() {
+      return myAdminDoc().get('scopes', ['content', 'messages', 'settings', 'users']);
+    }
+
+    function canManageUsers() {
+      return isAdmin() && (myRole() == 'owner' || ('users' in myScopes()));
+    }
+
+    function hasScope(scope) {
+      return isAdmin() && (myRole() == 'owner' || (scope in myScopes()));
+    }
+
     function isPublished() {
       return resource.data.published == true;
     }
 
-    // Admin membership: a signed-in user may read their own entry (used by the
-    // admin panel and the revalidate action). Writes only via the console.
+    // Admin membership. Signed-in users may read their own entry; admins who
+    // can manage users may create, update or delete other admins. The invite
+    // path lets a newly signed-in user claim a matching invite without any
+    // existing admin writing on their behalf.
     match /admins/{uid} {
+      function invite() {
+        return get(/databases/$(database)/documents/adminInvites/$(request.auth.token.email.lower())).data;
+      }
+      function hasPendingInvite() {
+        return request.auth.token.email != null
+          && exists(/databases/$(database)/documents/adminInvites/$(request.auth.token.email.lower()));
+      }
+      function matchesInvite() {
+        return request.resource.data.role == invite().role
+          && request.resource.data.scopes == invite().scopes
+          && request.resource.data.email == request.auth.token.email.lower();
+      }
+      function validShape() {
+        return request.resource.data.keys().hasOnly(['email', 'role', 'scopes', 'createdAt', 'createdBy'])
+          && request.resource.data.role in ['owner', 'admin', 'editor']
+          && request.resource.data.scopes is list
+          && request.resource.data.email is string;
+      }
+
       allow read: if request.auth != null && (request.auth.uid == uid || isAdmin());
-      allow write: if false;
+
+      allow create: if request.auth != null && validShape() && (
+        (request.auth.uid == uid && hasPendingInvite() && matchesInvite()
+          && request.resource.data.role != 'owner')
+        || (canManageUsers() && request.resource.data.role != 'owner')
+      );
+
+      allow update: if canManageUsers() && validShape()
+        && resource.data.get('role', 'owner') != 'owner'
+        && request.resource.data.role != 'owner';
+
+      allow delete: if canManageUsers()
+        && resource.data.get('role', 'owner') != 'owner'
+        && request.auth.uid != uid;
+    }
+
+    // Pending admin invites keyed by lowercased email. Only user-managers may
+    // create them; the invited user can read and delete their own invite.
+    match /adminInvites/{inviteId} {
+      function isOwnInvite() {
+        return request.auth != null && request.auth.token.email != null
+          && inviteId == request.auth.token.email.lower();
+      }
+      function validInviteShape() {
+        return request.resource.data.keys().hasOnly(['email', 'role', 'scopes', 'createdAt', 'createdBy'])
+          && request.resource.data.role in ['admin', 'editor']
+          && request.resource.data.scopes is list
+          && request.resource.data.email == inviteId;
+      }
+      allow read: if canManageUsers() || isOwnInvite();
+      allow create, update: if canManageUsers() && validInviteShape();
+      allow delete: if canManageUsers() || isOwnInvite();
     }
 
     // Site-wide settings, including contact details. Public read.

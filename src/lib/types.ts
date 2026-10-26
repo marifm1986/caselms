@@ -96,6 +96,43 @@ export type Post = {
   published: boolean;
 };
 
+export const ADMIN_SCOPES = ["content", "messages", "settings", "users"] as const;
+export type AdminScope = (typeof ADMIN_SCOPES)[number];
+
+export const ADMIN_SCOPE_LABELS: Record<AdminScope, string> = {
+  content: "Content",
+  messages: "Messages",
+  settings: "Site settings",
+  users: "User management",
+};
+
+export const ADMIN_ROLES = ["owner", "admin", "editor"] as const;
+export type AdminRole = (typeof ADMIN_ROLES)[number];
+
+export const ADMIN_ROLE_LABELS: Record<AdminRole, string> = {
+  owner: "Owner",
+  admin: "Admin",
+  editor: "Editor",
+};
+
+export type AdminUser = {
+  uid: string;
+  email: string;
+  role: AdminRole;
+  scopes: AdminScope[];
+  createdAt?: string;
+  createdBy?: string | null;
+};
+
+export type AdminInvite = {
+  id: string;
+  email: string;
+  role: Exclude<AdminRole, "owner">;
+  scopes: AdminScope[];
+  createdAt: string;
+  createdBy: string;
+};
+
 export type ContactMessage = {
   id: string;
   name: string;

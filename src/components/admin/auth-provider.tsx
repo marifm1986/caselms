@@ -1,15 +1,19 @@
 "use client";
 
 import { onAuthStateChanged, signOut, type User } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { revalidateContent } from "@/app/actions/revalidate";
 import { firebaseAuth, firestore } from "@/lib/firebase/client";
 import { isFirebaseConfigured } from "@/lib/env";
+import { ADMIN_SCOPES, type AdminRole, type AdminScope } from "@/lib/types";
 
 type AuthState = {
   user: User | null;
   isAdmin: boolean;
+  role: AdminRole | null;
+  scopes: AdminScope[];
+  can: (scope: AdminScope) => boolean;
   loading: boolean;
   logout: () => Promise<void>;
   /** Refreshes the public site's cached content for the given tags. */
@@ -18,9 +22,12 @@ type AuthState = {
 
 const AuthContext = createContext<AuthState | null>(null);
 
+const ALL_SCOPES: AdminScope[] = [...ADMIN_SCOPES];
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [role, setRole] = useState<AdminRole | null>(null);
+  const [scopes, setScopes] = useState<AdminScope[]>([]);
   const [loading, setLoading] = useState(isFirebaseConfigured);
 
   useEffect(() => {
@@ -28,15 +35,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return onAuthStateChanged(firebaseAuth(), async (next) => {
       setLoading(true);
       setUser(next);
-      if (next) {
-        try {
-          const snap = await getDoc(doc(firestore(), "admins", next.uid));
-          setIsAdmin(snap.exists());
-        } catch {
-          setIsAdmin(false);
+      if (!next) {
+        setRole(null);
+        setScopes([]);
+        setLoading(false);
+        return;
+      }
+      try {
+        const adminRef = doc(firestore(), "admins", next.uid);
+        let snap = await getDoc(adminRef);
+
+        // First login after being invited: claim the pending invite.
+        if (!snap.exists() && next.email) {
+          const email = next.email.toLowerCase();
+          const inviteRef = doc(firestore(), "adminInvites", email);
+          const inviteSnap = await getDoc(inviteRef);
+          if (inviteSnap.exists()) {
+            const invite = inviteSnap.data() as {
+              role: AdminRole;
+              scopes: AdminScope[];
+              createdBy?: string | null;
+            };
+            await setDoc(adminRef, {
+              email,
+              role: invite.role,
+              scopes: invite.scopes,
+              createdAt: new Date().toISOString(),
+              createdBy: invite.createdBy ?? null,
+            });
+            await deleteDoc(inviteRef).catch(() => undefined);
+            snap = await getDoc(adminRef);
+          }
         }
-      } else {
-        setIsAdmin(false);
+
+        if (snap.exists()) {
+          const data = snap.data() as { role?: AdminRole; scopes?: AdminScope[] };
+          setRole(data.role ?? "owner");
+          setScopes(data.scopes ?? ALL_SCOPES);
+        } else {
+          setRole(null);
+          setScopes([]);
+        }
+      } catch {
+        setRole(null);
+        setScopes([]);
       }
       setLoading(false);
     });
@@ -54,7 +96,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [user],
   );
 
-  return <AuthContext.Provider value={{ user, isAdmin, loading, logout, publish }}>{children}</AuthContext.Provider>;
+  const isAdmin = role !== null;
+  const can = useCallback(
+    (scope: AdminScope) => role === "owner" || scopes.includes(scope),
+    [role, scopes],
+  );
+
+  return (
+    <AuthContext.Provider value={{ user, isAdmin, role, scopes, can, loading, logout, publish }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {

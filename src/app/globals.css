@@ -1,27 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-roboto), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-playfair), "Playfair Display", ui-serif, Georgia, "Times New Roman", serif;
 
-  /* Brand: deep ink navy, confident blue, warm brass accent */
-  --color-ink-950: #070d1f;
-  --color-ink-900: #0b1530;
-  --color-ink-800: #14214a;
-  --color-ink-700: #1e2f63;
-  --color-brand-50: #eef2ff;
-  --color-brand-100: #dfe6ff;
-  --color-brand-200: #c3cffd;
-  --color-brand-300: #9cb0fb;
-  --color-brand-400: #6f88f6;
-  --color-brand-500: #4a63ee;
-  --color-brand-600: #2f45d8;
-  --color-brand-700: #2536b0;
-  --color-brand-800: #1f2e8a;
-  --color-brass-300: #f6d58c;
-  --color-brass-400: #f0c060;
-  --color-brass-500: #d9a23a;
-  --color-brass-700: #8a5d12;
+  /* Brand: barrister navy, chambers blue, polished brass */
+  --color-ink-950: #040814;
+  --color-ink-900: #0a1226;
+  --color-ink-800: #111c3d;
+  --color-ink-700: #192756;
+  --color-brand-50: #eef2fb;
+  --color-brand-100: #d8e0f3;
+  --color-brand-200: #b4c2e5;
+  --color-brand-300: #8097ce;
+  --color-brand-400: #4e6bb0;
+  --color-brand-500: #2f4d94;
+  --color-brand-600: #1f3a7a;
+  --color-brand-700: #182e62;
+  --color-brand-800: #11234d;
+  --color-brass-100: #fbecc7;
+  --color-brass-200: #f7dfa9;
+  --color-brass-300: #f3d791;
+  --color-brass-400: #ebbf62;
+  --color-brass-500: #c99a3b;
+  --color-brass-600: #a97a22;
+  --color-brass-700: #7a560f;
 
   --animate-marquee: marquee 40s linear infinite;
   @keyframes marquee {
@@ -61,22 +64,31 @@
   @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
 }
 @utility btn {
-  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60;
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-5 py-2.5 text-sm font-semibold tracking-wide transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60;
 }
 @utility btn-primary {
-  @apply btn bg-brand-600 text-white hover:bg-brand-700;
+  @apply btn bg-ink-900 text-white shadow-sm ring-1 ring-ink-900 hover:bg-ink-800 hover:shadow-md;
 }
 @utility btn-secondary {
-  @apply btn border border-slate-300 bg-white text-ink-900 hover:border-brand-600 hover:text-brand-700;
+  @apply btn border border-ink-900/15 bg-white text-ink-900 hover:border-brass-500 hover:text-brass-700;
 }
 @utility btn-light {
-  @apply btn bg-white text-ink-900 hover:bg-brass-300;
+  @apply btn bg-white text-ink-900 ring-1 ring-white/40 hover:bg-brass-300 hover:ring-brass-300;
 }
 @utility btn-ghost-dark {
-  @apply btn border border-white/30 text-white hover:bg-white/10;
+  @apply btn border border-brass-300/50 text-brass-200 hover:bg-brass-300/10 hover:text-brass-100;
 }
 @utility eyebrow {
-  @apply inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] text-brand-700 uppercase;
+  @apply inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] text-brass-700 uppercase;
+}
+@utility brass-rule {
+  @apply block h-px w-10 bg-linear-to-r from-brass-500 via-brass-400 to-transparent;
+}
+@utility badge-pill {
+  @apply inline-flex items-center gap-1.5 rounded-full border border-ink-900/10 bg-white/60 px-3 py-1 text-[11px] font-medium text-ink-800 backdrop-blur-sm;
+}
+@utility card-chambers {
+  @apply relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white transition-all duration-300 before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-transparent before:via-brass-400/60 before:to-transparent before:opacity-0 before:transition-opacity hover:-translate-y-0.5 hover:border-ink-900/15 hover:shadow-[0_18px_40px_-20px_rgba(10,18,38,0.35)] hover:before:opacity-100;
 }
 @utility section {
   @apply py-20 sm:py-28;
@@ -102,4 +114,30 @@
     linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
     linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
   background-size: 48px 48px;
+}
+
+/* Subtle colonnade: vertical pin-stripes evoking courthouse columns. */
+.bg-colonnade {
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgb(255 255 255 / 0.04) 0 1px,
+    transparent 1px 72px
+  );
+}
+
+/* Brass hairline divider used under eyebrows and section headings. */
+.brass-divider {
+  display: inline-block;
+  height: 2px;
+  width: 2.5rem;
+  background: linear-gradient(90deg, var(--color-brass-500), var(--color-brass-300) 60%, transparent);
+  border-radius: 2px;
+}
+.brass-divider-center {
+  margin-inline: auto;
+}
+
+/* Decorative serif ampersand/section mark used in dark bands. */
+.seal-ring {
+  background: radial-gradient(circle at 30% 30%, rgb(243 215 145 / 0.25), transparent 60%);
 }

@@ -33,7 +33,7 @@ export function Footer({ settings, year }: { settings: SiteSettings; year: numbe
       <div className="container-page grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.4fr]">
         <div>
           <Link href="/" aria-label="Case LMS home" className="inline-block rounded-lg">
-            <Logo light />
+            <Logo className="w-45" light />
           </Link>
           <p className="mt-5 max-w-xs text-sm leading-6 text-slate-400">{settings.tagline}</p>
           {socials.length > 0 && (

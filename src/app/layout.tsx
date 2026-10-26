@@ -1,22 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { cacheTag } from "next/cache";
-import { Fraunces } from "next/font/google";
+import { Playfair_Display, Roboto } from "next/font/google";
 import { getSettings } from "@/lib/content";
 import { siteUrl } from "@/lib/env";
 import "./globals.css";
 
-// Body text uses the native system UI stack (zero font bytes); only display
-// headings load a web font, with "optional" so it can never delay LCP.
-const fraunces = Fraunces({
+const roboto = Roboto({
   subsets: ["latin"],
-  variable: "--font-fraunces",
+  variable: "--font-roboto",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
   display: "optional",
-  weight: ["600"],
+  weight: ["600", "700"],
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  "use cache";
-  cacheTag("settings");
   const settings = await getSettings();
   const title = `${settings.siteName} | Legal Practice Management Software`;
   return {
@@ -61,7 +63,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en-GB" className={fraunces.variable}>
+    <html lang="en-GB" className={`${roboto.variable} ${playfair.variable}`}>
       <body className="flex min-h-dvh flex-col">{children}</body>
     </html>
   );

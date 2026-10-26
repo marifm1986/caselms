@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronDown, Mail, Phone, Quote } from "lucide-react";
+import { ArrowRight, ChevronDown, Mail, Phone, Quote, Star } from "lucide-react";
 import Link from "next/link";
 import { Reveal } from "@/components/motion/reveal";
 import { CloudImage } from "@/components/ui/cloud-image";
@@ -22,7 +22,8 @@ export function SectionHeading({
   return (
     <div className={align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
       <p className="eyebrow">{eyebrow}</p>
-      <h2 id={id} className="font-display mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+      <span className={`brass-divider mt-3 ${align === "center" ? "brass-divider-center" : ""}`} aria-hidden="true" />
+      <h2 id={id} className="font-display mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
         {title}
       </h2>
       {intro && <p className="mt-4 text-lg leading-8 text-slate-600">{intro}</p>}
@@ -54,12 +55,15 @@ export function FeatureGrid({ features }: { features: Feature[] }) {
     <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
       {features.map((f, i) => (
         <Reveal as="li" key={f.id} delay={(i % 4) * 0.08}>
-          <article className="group h-full rounded-3xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-600/10">
-            <span className="flex size-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-700 transition-colors group-hover:bg-brand-600 group-hover:text-white">
+          <article className="card-chambers group h-full p-6">
+            <span className="flex size-12 items-center justify-center rounded-xl bg-ink-900 text-brass-300 ring-1 ring-ink-900/10 transition-colors group-hover:bg-brand-700 group-hover:text-brass-200">
               <FeatureIcon name={f.icon} className="size-6" />
             </span>
-            <h3 className="mt-5 text-lg font-semibold">{f.title}</h3>
+            <h3 className="font-display mt-5 text-lg font-semibold text-ink-900">{f.title}</h3>
             <p className="mt-2 text-sm leading-6 text-slate-600">{f.summary}</p>
+            <span className="mt-5 flex items-center gap-1.5 text-xs font-semibold tracking-wider text-brass-700 uppercase opacity-0 transition-opacity group-hover:opacity-100">
+              Learn more <ArrowRight className="size-3.5" aria-hidden="true" />
+            </span>
           </article>
         </Reveal>
       ))}
@@ -91,10 +95,13 @@ export function PracticeMarquee() {
     </ul>
   );
   return (
-    <section aria-labelledby="practice-areas" className="border-b border-slate-200 bg-slate-50 py-10">
-      <h2 id="practice-areas" className="text-center text-sm font-medium text-slate-600">
-        Trusted across every area of practice
-      </h2>
+    <section aria-labelledby="practice-areas" className="border-y border-slate-200 bg-slate-50 py-10">
+      <div className="flex flex-col items-center gap-3">
+        <span className="brass-divider" aria-hidden="true" />
+        <h2 id="practice-areas" className="text-center text-xs font-semibold tracking-[0.22em] text-ink-800 uppercase">
+          Trusted across every area of practice
+        </h2>
+      </div>
       <div className="relative mt-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
         <div className="flex w-max animate-marquee hover:[animation-play-state:paused] motion-reduce:animate-none">
           {row(false)}
@@ -118,9 +125,20 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
         <ul className="mt-14 grid gap-6 lg:grid-cols-3">
           {items.map((t, i) => (
             <Reveal as="li" key={t.id} delay={i * 0.1}>
-              <figure className="flex h-full flex-col rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-200">
-                <Quote className="size-8 text-brass-400" aria-hidden="true" />
-                <blockquote className="mt-4 flex-1 text-base leading-7 text-ink-900">
+              <figure className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200 transition-shadow duration-300 hover:shadow-lg hover:shadow-ink-900/5">
+                <span
+                  className="absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-transparent via-brass-400 to-transparent"
+                  aria-hidden="true"
+                />
+                <div className="flex items-center justify-between">
+                  <Quote className="size-8 text-brass-400" aria-hidden="true" />
+                  <div className="flex items-center gap-0.5" aria-label="Rated 5 out of 5">
+                    {Array.from({ length: 5 }).map((_, k) => (
+                      <Star key={k} className="size-3.5 fill-brass-400 text-brass-400" aria-hidden="true" />
+                    ))}
+                  </div>
+                </div>
+                <blockquote className="font-display mt-5 flex-1 text-lg leading-8 text-ink-900">
                   <p>&ldquo;{t.quote}&rdquo;</p>
                 </blockquote>
                 <figcaption className="mt-6 flex items-center gap-3 border-t border-slate-100 pt-6">
@@ -174,13 +192,19 @@ export function CtaBand({ settings }: { settings: SiteSettings }) {
     <section aria-labelledby="cta-title" className="section">
       <div className="container-page">
         <Reveal>
-          <div className="relative overflow-hidden rounded-[2rem] bg-ink-900 px-6 py-14 text-center sm:px-16 sm:py-20">
-            <div className="bg-grid absolute inset-0" aria-hidden="true" />
+          <div className="relative overflow-hidden rounded-2xl bg-ink-900 px-6 py-14 text-center ring-1 ring-brass-400/20 sm:px-16 sm:py-20">
+            <div className="bg-grid absolute inset-0 opacity-80" aria-hidden="true" />
+            <div className="bg-colonnade absolute inset-0" aria-hidden="true" />
             <div
-              className="absolute -bottom-32 left-1/2 size-96 -translate-x-1/2 rounded-full bg-brand-600/40 blur-3xl"
+              className="seal-ring absolute -bottom-32 left-1/2 size-96 -translate-x-1/2 rounded-full"
+              aria-hidden="true"
+            />
+            <span
+              className="absolute inset-x-16 top-0 h-px bg-linear-to-r from-transparent via-brass-400/60 to-transparent"
               aria-hidden="true"
             />
             <div className="relative">
+              <span className="brass-divider brass-divider-center mb-4" aria-hidden="true" />
               <h2 id="cta-title" className="font-display mx-auto max-w-2xl text-3xl font-semibold text-white sm:text-4xl">
                 See Case LMS working on your own matters
               </h2>

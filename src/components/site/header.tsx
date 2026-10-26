@@ -50,9 +50,9 @@ export function Header() {
         scrolled ? "border-slate-200 shadow-sm" : "border-transparent"
       }`}
     >
-      <nav aria-label="Main" className="container-page flex h-16 items-center justify-between gap-6 lg:h-18">
+      <nav aria-label="Main" className="container-page flex h-50 items-center justify-between gap-6 lg:h-18">
         <Link href="/" className="rounded-lg" aria-label="Case LMS home">
-          <Logo />
+          <Logo className="w-45" />
         </Link>
 
         <ul className="hidden items-center gap-1 lg:flex">

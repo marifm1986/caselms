@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, CloudUpload, Rocket, Search } from "lucide-react";
+import { ArrowRight, CheckCircle2, CloudUpload, Lock, Rocket, Scale, Search, ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Reveal } from "@/components/motion/reveal";
@@ -46,20 +46,23 @@ export default async function HomePage() {
     <>
       {/* Hero: text renders without entrance animation so it paints as the LCP element immediately. */}
       <section aria-labelledby="hero-title" className="relative overflow-hidden bg-ink-900 text-slate-300">
-        <div className="bg-grid absolute inset-0" aria-hidden="true" />
-        <div className="absolute -top-48 -left-32 size-[36rem] rounded-full bg-brand-600/30 blur-3xl" aria-hidden="true" />
+        <div className="bg-grid absolute inset-0 opacity-70" aria-hidden="true" />
+        <div className="bg-colonnade absolute inset-0" aria-hidden="true" />
+        <div className="absolute -top-48 -left-32 size-[36rem] rounded-full bg-brand-600/25 blur-3xl" aria-hidden="true" />
+        <div className="seal-ring absolute -right-24 top-20 size-[28rem] rounded-full" aria-hidden="true" />
         <div className="container-page relative grid items-center gap-16 py-20 sm:py-24 lg:grid-cols-[1.05fr_1fr] lg:py-28">
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold text-brass-300">
-              <span className="size-1.5 rounded-full bg-brass-400" aria-hidden="true" />
+            <p className="inline-flex items-center gap-2 rounded-full border border-brass-300/30 bg-white/5 px-4 py-1.5 text-xs font-semibold tracking-[0.18em] text-brass-200 uppercase">
+              <Scale className="size-3.5 text-brass-300" aria-hidden="true" />
               Built by lawyers, for law firms
             </p>
             <h1
               id="hero-title"
-              className="font-display mt-6 text-4xl leading-[1.08] font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl"
+              className="font-display mt-6 text-4xl leading-[1.05] font-semibold tracking-tight text-white sm:text-5xl lg:text-[3.75rem]"
             >
-              Run your whole firm from one <span className="text-brass-300">secure</span> workspace
+              Run your whole firm from one <span className="italic text-brass-300">secure</span> workspace
             </h1>
+            <span className="brass-divider mt-6" aria-hidden="true" />
             <p className="mt-6 max-w-xl text-lg leading-8">{settings.description}</p>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link href="/contact?topic=demo" className="btn-light">
@@ -77,6 +80,23 @@ export default async function HomePage() {
                 </li>
               ))}
             </ul>
+            <dl className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/10 pt-6 text-xs tracking-wide text-slate-400 uppercase">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="size-4 text-brass-400" aria-hidden="true" />
+                <dt className="sr-only">Standard</dt>
+                <dd>ISO 27001 aligned</dd>
+              </div>
+              <div className="flex items-center gap-2">
+                <Lock className="size-4 text-brass-400" aria-hidden="true" />
+                <dt className="sr-only">Hosting</dt>
+                <dd>UK data residency</dd>
+              </div>
+              <div className="flex items-center gap-2">
+                <Scale className="size-4 text-brass-400" aria-hidden="true" />
+                <dt className="sr-only">Fit</dt>
+                <dd>SRA accounts rules ready</dd>
+              </div>
+            </dl>
           </div>
           <HeroMockup />
         </div>
