@@ -12,6 +12,9 @@ import { siteUrl } from "@/lib/env";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
+    description:
+    "Case LMS was founded by lawyers who wanted practice management software that works the way law firms really work. Meet the team and our values.",
+  openGraph: { url: "/" },
 };
 
 const steps = [
