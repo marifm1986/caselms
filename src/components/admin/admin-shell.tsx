@@ -103,18 +103,22 @@ function Gate({ children }: { children: React.ReactNode }) {
         <Logo light />
       </Link>
       <ul className="mt-8 flex-1 space-y-1 overflow-y-auto">
-        {nav.filter((item) => !item.scope || can(item.scope)).map((item) => (
-          <li key={item.href}>
-            <Link
-              href={item.href}
-              aria-current={isActive(item.href) ? "page" : undefined}
-              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-white aria-[current=page]:bg-brand-600 aria-[current=page]:text-white"
-            >
-              {item.icon}
-              {item.label}
-            </Link>
-          </li>
-        ))}
+        {nav
+          .filter((item) => !item.scope || can(item.scope))
+          .slice()
+          .sort((a, b) => a.label.localeCompare(b.label))
+          .map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                aria-current={isActive(item.href) ? "page" : undefined}
+                className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-white aria-[current=page]:bg-brand-600 aria-[current=page]:text-white"
+              >
+                {item.icon}
+                {item.label}
+              </Link>
+            </li>
+          ))}
       </ul>
       <div className="mt-6 border-t border-white/10 pt-4">
         <p className="truncate px-3 text-xs text-slate-400">{user.email}</p>

@@ -10,6 +10,8 @@ import { Logo } from "@/components/ui/icons";
 
 export const navLinks = [
   { href: "/features", label: "Features" },
+  { href: "/platform", label: "Platform" },
+  { href: "/why", label: "Why Case LMS" },
   { href: "/pricing", label: "Pricing" },
   { href: "/about", label: "About" },
   { href: "/blog", label: "Insights" },

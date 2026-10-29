@@ -1,7 +1,7 @@
 "use client";
 
-import { addDoc, collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
-import { Pencil, Plus, Search, Trash } from "lucide-react";
+import { addDoc, collection, deleteDoc, doc, getDocs, setDoc, writeBatch } from "firebase/firestore";
+import { Pencil, Plus, Search, Sprout, Trash } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/components/admin/auth-provider";
 import { cleanValues, RecordForm } from "@/components/admin/record-form";
@@ -93,6 +93,33 @@ export function CrudManager({ collectionKey }: { collectionKey: string }) {
     }
   }
 
+  const missingSeeds = useMemo(() => {
+    const key = def.titleField === "slug" || def.fields.some((f) => f.name === "slug") ? "slug" : def.titleField;
+    const existing = new Set(rows.map((r) => String(r[key] ?? "").toLowerCase()).filter(Boolean));
+    return def.seed.filter((item) => {
+      const value = String((item as Record<string, unknown>)[key] ?? "").toLowerCase();
+      return value && !existing.has(value);
+    });
+  }, [def, rows]);
+
+  async function addMissingSeeds() {
+    if (missingSeeds.length === 0) return;
+    setBusy(true);
+    try {
+      const db = firestore();
+      const batch = writeBatch(db);
+      missingSeeds.forEach((item) => batch.set(doc(collection(db, def.key)), item));
+      await batch.commit();
+      await Promise.all([load(), publish([def.tag])]);
+      notify(`Added ${missingSeeds.length} new ${missingSeeds.length === 1 ? def.singular : def.label.toLowerCase()}.`);
+    } catch (err) {
+      console.error(err);
+      notify("Could not add defaults. Check your permissions.", "error");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function confirmDelete() {
     if (!deleting) return;
     setBusy(true);
@@ -117,9 +144,23 @@ export function CrudManager({ collectionKey }: { collectionKey: string }) {
         title={def.label}
         description={def.description}
         action={
-          <button type="button" className="btn-primary" onClick={() => setEditing("new")}>
-            <Plus className="size-4" aria-hidden="true" /> New {def.singular}
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            {missingSeeds.length > 0 && (
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={addMissingSeeds}
+                disabled={busy}
+                title={`${missingSeeds.length} default ${missingSeeds.length === 1 ? def.singular : def.label.toLowerCase()} not yet added`}
+              >
+                <Sprout className="size-4" aria-hidden="true" />
+                {busy ? "Adding…" : `Add ${missingSeeds.length} default ${missingSeeds.length === 1 ? def.singular : def.label.toLowerCase()}`}
+              </button>
+            )}
+            <button type="button" className="btn-primary" onClick={() => setEditing("new")}>
+              <Plus className="size-4" aria-hidden="true" /> New {def.singular}
+            </button>
+          </div>
         }
       />
 

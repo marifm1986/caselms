@@ -272,6 +272,97 @@ export const defaultPosts: Seed<Post>[] = [
     publishedAt: "2026-09-15",
     published: true,
   },
+  {
+    title: "The hidden cost of partial automation in law firms",
+    slug: "hidden-cost-of-partial-automation",
+    excerpt:
+      "Automating one step and leaving the next to a spreadsheet often costs more than doing nothing. Here is how to spot a half-finished workflow.",
+    content:
+      "Half-automated workflows are the quiet drain on fee earner time. The task feels fast until the handover, then everything stalls.\n\n## Where handovers hurt\n\nA document is generated in seconds, then a fee earner copies the matter reference into a billing form. A client care letter goes out automatically, then someone updates the compliance register by hand. Each small bridge costs minutes, and those minutes compound across a hundred open matters.\n\n## Measure the gaps, not the wins\n\nMap one matter end to end and mark every point where a human moves information from one tool to another. The best automation targets are not the loudest problems; they are the quietest copy and paste steps.\n\n## Join the ends, not the middle\n\nA workflow pays back only when the first step connects to the last. Before investing in a new tool, check that it writes back to the systems you already rely on for billing, compliance and reporting.",
+    coverImage: "",
+    author: "Case LMS Team",
+    tags: ["Automation", "Operations"],
+    publishedAt: "2026-10-18",
+    published: true,
+  },
+  {
+    title: "What UK law firms should know about client portals in 2026",
+    slug: "client-portals-for-uk-law-firms-2026",
+    excerpt:
+      "Clients expect secure, mobile-first communication. A good portal is now the baseline, not a differentiator. Here is what to look for.",
+    content:
+      "The firms winning repeat work in 2026 are the ones that make it effortless for a client to see what is happening on their matter.\n\n## From email threads to shared records\n\nA portal is not an inbox. Correspondence, documents, invoices and e-signatures should sit against the matter so a client sees a single ordered record, not a scattered thread.\n\n## Mobile first, by default\n\nMost clients will open the portal on a phone. If an ID upload, a signature or a payment is not a two-tap flow, it will not get done.\n\n## Security the client can see\n\nTwo-factor sign-in, a visible session list and clear data-residency statements turn security from a worry into a trust signal. Make them easy to find.\n\n## Metrics that matter\n\nTrack activation rate, median time to first login, and the share of matters where the portal replaces email entirely. These numbers tell you whether the portal is actually serving clients, or just sitting unused.",
+    coverImage: "",
+    author: "Case LMS Team",
+    tags: ["Client experience", "Technology"],
+    publishedAt: "2026-10-10",
+    published: true,
+  },
+  {
+    title: "A short guide to the SRA accounts rules for growing practices",
+    slug: "sra-accounts-rules-guide-growing-practices",
+    excerpt:
+      "The rules are short, but the day-to-day habits that keep you compliant are not. A plain-English summary for firms adding fee earners.",
+    content:
+      "The SRA accounts rules fit on a few pages, which can give the false impression that compliance is simple. In practice, it is the daily habits around trust money that trip firms up.\n\n## Separate client money from your own\n\nClient money sits in a client account, held separately from office money. Prompt banking and a clear naming convention for ledgers prevent the most common mix-ups.\n\n## Reconcile at least every five weeks\n\nThree-way reconciliations between the bank, the client ledger and the matter balances must be documented and signed off. A ten-minute weekly habit is cheaper than a quarterly reconstruction.\n\n## Return residual balances promptly\n\nSmall unclaimed balances add up. Build a monthly review into the routine and keep the paper trail for anything paid to charity.\n\n## Train everyone who touches a ledger\n\nFee earners, cashiers and partners should all understand what a client account is and is not. A quarterly refresher is a small investment against a significant risk.",
+    coverImage: "",
+    author: "Case LMS Team",
+    tags: ["Compliance", "Trust accounting"],
+    publishedAt: "2026-09-28",
+    published: true,
+  },
+  {
+    title: "Preparing your firm for the next wave of AI in legal work",
+    slug: "preparing-your-firm-for-ai-in-legal-work",
+    excerpt:
+      "AI is moving from novelty to utility. A short, honest plan for partners who need to decide what to adopt, what to pilot and what to leave alone.",
+    content:
+      "The useful question is no longer whether AI belongs in the practice, but which parts of the practice benefit first.\n\n## Start where mistakes are cheap\n\nResearch summaries, first-draft correspondence and clause comparison are good first pilots. Mistakes are caught by the fee earner, and the time saving is real.\n\n## Keep humans accountable, visibly\n\nEvery output needs a named reviewer. Record who checked what, when, so the audit trail protects both the client and the firm.\n\n## Watch the data path\n\nBefore a tool goes near a client file, ask three questions: where does the data sit, who can see it, and how long is it kept. The answer must be in writing.\n\n## Measure before you expand\n\nPick two matter types, run the pilot for a quarter, and compare average fee earner hours and realisation. If the numbers do not move, change the pilot before changing the policy.",
+    coverImage: "",
+    author: "Case LMS Team",
+    tags: ["AI", "Strategy"],
+    publishedAt: "2026-09-20",
+    published: true,
+  },
+  {
+    title: "WIP, lock-up and the levers that free cash in a mid-sized firm",
+    slug: "wip-lock-up-levers-free-cash-mid-sized-firm",
+    excerpt:
+      "Lock-up is the single biggest cash problem for growing firms. Four levers that partners can pull in the next quarter, with the data to prove the impact.",
+    content:
+      "Cash flow does not improve by trying harder. It improves by moving a handful of specific numbers.\n\n## Bill more frequently, bill smaller\n\nA monthly bill of £3,000 lands better than a quarterly bill of £9,000, and lock-up drops immediately. Interim billing policies are the fastest lever a managing partner can pull.\n\n## Capture time in the day it happens\n\nTime captured within 24 hours is both more accurate and more defensible. A phone-first time entry habit shortens the cycle from work done to work billed.\n\n## Investigate aged WIP, do not ignore it\n\nAnything over 90 days should be reviewed matter by matter. Decide to bill, write down or close, but decide.\n\n## Make the number visible\n\nA weekly WIP and lock-up dashboard, shared with heads of department, changes behaviour faster than any policy memo. Transparency is the lever.",
+    coverImage: "",
+    author: "Case LMS Team",
+    tags: ["Finance", "Operations"],
+    publishedAt: "2026-09-05",
+    published: true,
+  },
+  {
+    title: "Running a secure document review when half the team is remote",
+    slug: "secure-document-review-hybrid-team",
+    excerpt:
+      "Hybrid working is here to stay. A short playbook for keeping document review fast, auditable and compliant when reviewers are not in the same room.",
+    content:
+      "Document review used to assume a shared office and a shared drive. Neither is a safe assumption now, and the rules of the review need to catch up.\n\n## One source, versioned\n\nReviewers should see the same current version from any device, with every change tracked. Local copies and emailed attachments are where review quality quietly degrades.\n\n## Permissions scoped to the matter\n\nAccess should sit on the matter, not on a folder in a shared drive. When a reviewer leaves the matter, their access leaves with them, automatically.\n\n## Audit trails that read like a story\n\nA good trail answers who opened the document, who edited it, who approved it and when, in that order. Export it with the matter close, every time.\n\n## Plan for the lost laptop\n\nFull-disk encryption, short session timeouts and a documented remote-wipe procedure turn a stolen device from an incident into a non-event.",
+    coverImage: "",
+    author: "Case LMS Team",
+    tags: ["Security", "Documents"],
+    publishedAt: "2026-08-22",
+    published: true,
+  },
+  {
+    title: "Choosing a legal practice management system: a buyer's checklist",
+    slug: "legal-practice-management-buyers-checklist",
+    excerpt:
+      "A one-page checklist for firms shortlisting a new system. Twenty questions that separate marketing claims from working software.",
+    content:
+      "Every vendor demo looks good. The useful questions are the ones that reveal how the software behaves on a difficult Tuesday.\n\n## Data and ownership\n\nWhere is the data hosted. Who holds the keys. How quickly can you leave with a full, usable export. If the answers are vague, treat it as a product gap.\n\n## Compliance baked in\n\nAre risk assessments, ID checks and conflict checks part of matter intake, or bolted on. Can file reviews be assigned and tracked without a separate tool.\n\n## Billing and trust accounting\n\nCan the system run a three-way reconciliation. Does it support interim billing, agreed-fee matters and complex disbursements, in one invoice.\n\n## Reporting out of the box\n\nAsk to see WIP, lock-up, realisation and utilisation reports with real data, not a dashboard screenshot. If the vendor needs a developer to build them, so will you.\n\n## Migration and support\n\nWho runs the migration, how long does it take and what is checked at sign off. What does support look like at 9pm on a Friday.\n\nTreat the demo as an interview. The best vendors will welcome the detail.",
+    coverImage: "",
+    author: "Case LMS Team",
+    tags: ["Buying guide", "Practice management"],
+    publishedAt: "2026-08-10",
+    published: true,
+  },
 ];
 
 const withIds = <T,>(items: Seed<T>[], prefix: string) =>

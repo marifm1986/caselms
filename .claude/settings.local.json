@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(npx tsc --noEmit -p tsconfig.json)"
+      "PowerShell(npx tsc --noEmit -p tsconfig.json)",
+      "WebFetch(domain:yaotechnology.com)"
     ]
   }
 }
