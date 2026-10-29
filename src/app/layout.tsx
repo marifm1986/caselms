@@ -1,14 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Roboto } from "next/font/google";
+import { Inter } from "next/font/google";
 import { getSettings } from "@/lib/content";
 import { siteUrl } from "@/lib/env";
 import "./globals.css";
 
-const roboto = Roboto({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-roboto",
+  variable: "--font-sans-display",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -56,7 +55,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en-GB" className={roboto.variable}>
+    <html lang="en-GB" className={inter.variable}>
       <body className="flex min-h-dvh flex-col">{children}</body>
     </html>
   );
